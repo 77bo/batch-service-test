@@ -32,24 +32,43 @@ module.exports.exec = function(data, next) {
     console.debug('task', task);
     const urlTemplate = _.template(data.endpoint.url);
     const url = urlTemplate({'userId': task.userId});
-    console.debug('requesting', url);
-    request({
-      url: url,
-      method: data.endpoint.method,
-      json: true,
-      body: task
-    }, function (error, response, body) {
-      console.debug('error:', error);
-      console.debug('statusCode:', response && response.statusCode);
-      // update stats
-      const success = response && response.statusCode == 200;
-      if (success) {
+
+    let attempt = 0;
+    async.retry(2, executeRequest, function(err, result) {
+      console.debug('final result', result);
+      if (result.success) {
         stats.success++;
       } else {
         stats.failed++;
       }
-      callback({task: task, success: success, status: response.statusCode});
+      callback(result);
     });
+
+    function executeRequest(cb) {
+      console.debug('requesting', url);
+      request({
+        url: url,
+        method: data.endpoint.method,
+        json: true,
+        body: task
+      }, function (error, response, body) {
+        console.debug('error:', error);
+        console.debug('statusCode:', response && response.statusCode);
+        // update stats
+        const success = response && response.statusCode == 200;
+        const result = {
+          task: task,
+          success: success,
+          status: response.statusCode,
+          attempt: ++attempt
+        };
+        if (!success) {
+          return cb(true, result);
+        }
+        cb(null, result);
+      });
+    }
+
   }, 5);
 
   var pushingToQueue = true;
