@@ -5,7 +5,7 @@ To start app just execute next commands:
 
 #Postman
 
-You can import postman collection `batch-test.json`.
+You can import postman collection `batch-editing-service.postman_collection.json`.
 Or build request yourself:
 ```javascript
 POST http://localhost:3000/batch

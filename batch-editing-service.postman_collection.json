@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "6a4b8cca-e2ff-46b7-9995-a2310924a06d",
+		"name": "batch-editing-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "batch",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"endpoint\": {\n\t\t\"method\": \"DELETE\",\n\t\t\"url\": \"https://guesty-user-service.herokuapp.com/user/{userId}\"\n\t},\n\t\"payload\": [\n\t\t{\n\t\t\t\"userId\": 1,\n\t\t\t\"name\": \"Bob\"\n\t\t},\n\t\t{\n\t\t\t\"userId\": 2,\n\t\t\t\"name\": \"Bob\"\n\t\t},\n\t\t{\n\t\t\t\"userId\": 3,\n\t\t\t\"name\": \"Bob\"\n\t\t},\n\t\t{\n\t\t\t\"userId\": 4,\n\t\t\t\"name\": \"Bob\"\n\t\t},\n\t\t{\n\t\t\t\"userId\": 5,\n\t\t\t\"name\": \"Bob\"\n\t\t},\n\t\t{\n\t\t\t\"userId\": 6,\n\t\t\t\"name\": \"Bob\"\n\t\t}\n\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/batch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"batch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
