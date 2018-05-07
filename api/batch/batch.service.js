@@ -5,8 +5,21 @@ var async = require('async');
 // config to support parsing of PATH parameters in request object
 _.templateSettings.interpolate = /{([\s\S]+?)}/g;
 
+/**
+ * Execute batch requests on Users Service
+ *
+ * @param data - data to send, contains url and method
+ * @param next - called when processing is finished
+ */
 module.exports.exec = function(data, next) {
-  console.debug(data);
+  console.debug('input data', data);
+
+  var stats = {
+    total: data.payload.length,
+    success: 0,
+    failed: 0
+  };
+  var results = []; // resulting array, will contain task execution info
 
   // Split payload in group of 5 items.
   // Trying to satisfy service limitation of 5requests/10s
@@ -26,20 +39,23 @@ module.exports.exec = function(data, next) {
       json: true,
       body: task
     }, function (error, response, body) {
-      console.log('error:', error); // Print the error if one occurred
-      console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-      console.log('body:', body); // Print the HTML for the Google homepage.
+      console.debug('error:', error);
+      console.debug('statusCode:', response && response.statusCode);
+      // update stats
       const success = response && response.statusCode == 200;
-      callback({taks: task, success: success});
+      if (success) {
+        stats.success++;
+      } else {
+        stats.failed++;
+      }
+      callback({task: task, success: success, status: response.statusCode});
     });
   }, 5);
-
-  var results = [];
 
   var pushingToQueue = true;
   taskGroups.forEach((group, index) => {
     let delay = 10*1000;
-    if (index == 0) {
+    if (index === 0) {
       delay = 0;
     }
     // now lets push to queue portion of task each ~10 seconds
@@ -49,7 +65,7 @@ module.exports.exec = function(data, next) {
         console.debug('finished processing item', result);
         results.push(result);
       });
-      if (index == taskGroups.length - 1) {
+      if (index === taskGroups.length - 1) {
         pushingToQueue = false;
       }
     }, delay);
@@ -59,7 +75,7 @@ module.exports.exec = function(data, next) {
   q.drain = function() {
     console.debug('all items have been processed');
     if (!pushingToQueue) {
-      next(results);
+      next(stats, results);
     }
   };
 
