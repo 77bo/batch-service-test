@@ -1,9 +1,9 @@
-#How to run app
+# How to run app
 
 To start app just execute next commands:  
 `npm install` and then `npm start`
 
-#Postman
+# Postman
 
 You can import postman collection `batch-editing-service.postman_collection.json`.
 Or build request yourself:
