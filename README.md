@@ -39,3 +39,77 @@ Requst Body (just to test)
 }
 
 ```
+## Example Response
+
+```javascript
+{
+    "total": 7,
+    "success": 7,
+    "failed": 0,
+    "results": [
+        {
+            "task": {
+                "userId": 1,
+                "name": "Bob"
+            },
+            "success": true,
+            "status": 200,
+            "attempt": 1
+        },
+        {
+            "task": {
+                "userId": 2,
+                "name": "Bob"
+            },
+            "success": true,
+            "status": 200,
+            "attempt": 1
+        },
+        {
+            "task": {
+                "userId": 3,
+                "name": "Bob"
+            },
+            "success": true,
+            "status": 200,
+            "attempt": 1
+        },
+        {
+            "task": {
+                "userId": 5,
+                "name": "Bob"
+            },
+            "success": true,
+            "status": 200,
+            "attempt": 1
+        },
+        {
+            "task": {
+                "userId": 4,
+                "name": "Bob"
+            },
+            "success": true,
+            "status": 200,
+            "attempt": 2
+        },
+        {
+            "task": {
+                "userId": 6,
+                "name": "Bob"
+            },
+            "success": true,
+            "status": 200,
+            "attempt": 1
+        },
+        {
+            "task": {
+                "userId": 7,
+                "name": "Bob"
+            },
+            "success": true,
+            "status": 200,
+            "attempt": 1
+        }
+    ]
+}
+```
